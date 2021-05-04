@@ -26,44 +26,48 @@ if ":1" in response.text:
         response = requests.request("GET", detailsURL, headers=headers, data=payload)
         results = response.json()
 
-        #Creates TXT file, and adds API response to file
-        with open("apiResults1.txt", "w") as file:
-            file.write(json.dumps(results))
-            print("\nOrders downloaded and marked as RECEIVED.\n")
-            file.close()
-
+        while True:
             print("*" * 25)
             print("What would you like to do?")
             print("*" * 25)
             print("d = Download Data File")
+            print("v = View Raw Order Data")
             print("u = Update Order Status")
             print("q = Quit")
             print("*" * 25)
-            input_ = input(":")
+            answerMenu = input(":")
 
-            answerPrint = input("Type y for yes, n for no: ", )
 
-            if answerPrint == "y":
-                #Opens the TXT file
-                os.startfile("apiResults1.txt")
-                print("Enjoy!")
+            if answerMenu == "d":
+                # Creates TXT file, and adds API response to file
+                with open("apiResults1.txt", "w") as file:
+                    file.write(json.dumps(results))
+                    print("File Opened")
+                    os.startfile("apiResults1.txt")
 
-            if answerPrint == "n":
+            if answerMenu == "v":
+                print("Here is the raw data:\n", response.content)
+
+
+            if answerMenu == "q":
                 print("\nThank you, see you soon!")
+                break
 
+            # if answerPrint == "u":
 
-        # updateURL = "https://api.reptimeqa.com/reptime/public/api/import/M32685/orders/a87e7307-ffc6-490a-b1ac-f1a5d8f6c719/status/update"
-        #
-        # payload = "Pending"
-        # headers = {
-        #     'x-api-key': 'd843ec7a50cf568b220e3ec6fb2bc795',
-        #     'Content-Type': 'text/plain',
-        # }
-        #
-        # response = requests.request("POST", updateURL, headers=headers, data=payload)
+                # updateURL = "https://api.reptimeqa.com/reptime/public/api/import/M32685/orders/a87e7307-ffc6-490a-b1ac-f1a5d8f6c719/status/update"
+                #
+                # payload = "Pending"
+                # headers = {
+                #     'x-api-key': 'd843ec7a50cf568b220e3ec6fb2bc795',
+                #     'Content-Type': 'text/plain',
+                # }
+                #
+                # response = requests.request("POST", updateURL, headers=headers, data=payload)
+
 
     if answer == "n":
-        print("Thank you, come again!")
+        print("Thank you, see you later!")
 
 else:
     print("There are no new orders")
