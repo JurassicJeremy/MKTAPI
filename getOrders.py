@@ -10,67 +10,71 @@ headers = {
     'x-api-key': 'd843ec7a50cf568b220e3ec6fb2bc795'
 }
 # GET API to obtain count of new orders
-response = requests.request("GET", countURL, headers=headers, data=payload)
+responseCount = requests.request("GET", countURL, headers=headers, data=payload)
 
-count = json.loads(response.text)
+count = json.loads(responseCount.text)
+while True:
 
-#resolve issue with incorrect data showing. Shows count even when there are no orders.
-for count['response'] in response.text:
-    if count['response'] >= '0':
+    print("*" * 25)
+    print("What would you like to do?")
+    print("*" * 25)
+    print("c = Get New Order Count")
+    print("d = Download Data File")
+    print("v = View Raw Order Data")
+    print("u = Update Order Status")
+    print("q = Quit")
+    print("*" * 25)
+    answerMenu = input(":")
 
-        print('\nYou have', count['response'], 'new order(s), would you like to download them?\n')
+    if answerMenu == "d":
+        # Creates TXT file, and adds API response to file
+        with open("apiResults1.txt", "w") as file:
+            file.write(json.dumps(results))
+            print("File Opened")
+            os.startfile("apiResults1.txt")
 
-        answer = input("Type y for yes, n for no: ", )
+    if answerMenu == "v":
+        print("Here is the raw data:\n", response.content)
 
-        if answer == "y":
-            detailsURL = "https://api.reptimeqa.com/reptime/public/api/orders/export/M32685/open"
+    if answerMenu == "q":
+        print("\nThank you, see you soon!")
+        break
 
-            # GET API to obtain new order details
-            response = requests.request("GET", detailsURL, headers=headers, data=payload)
-            results = response.json()
+    if answerMenu == "u":
+        # User must update orderId within URL manually currently.
+        updateURL = "https://api.reptimeqa.com/reptime/public/api/import/M32685/orders/521420/status/update"
 
-            while True:
-                print("*" * 25)
-                print("What would you like to do?")
-                print("*" * 25)
-                print("d = Download Data File")
-                print("v = View Raw Order Data")
-                print("u = Update Order Status")
-                print("q = Quit")
-                print("*" * 25)
-                answerMenu = input(":")
+        responseUpdate = requests.request("POST", updateURL, headers=headers, data=payload)
 
+        payload = "Backorder"
+        headers = {
+            'x-api-key': 'd843ec7a50cf568b220e3ec6fb2bc795',
+            'Content-Type': 'text/plain',
+        }
 
-                if answerMenu == "d":
-                    # Creates TXT file, and adds API response to file
-                    with open("apiResults1.txt", "w") as file:
-                        file.write(json.dumps(results))
-                        print("File Opened")
-                        os.startfile("apiResults1.txt")
+        print("Done!")
 
-                if answerMenu == "v":
-                    print("Here is the raw data:\n", response.content)
+    if answerMenu == "c":
 
+        # Currently functional, but need to wildcard search for response, not sure how to do that yet.
+        if ":1" in responseCount.text:
 
-                if answerMenu == "q":
-                    print("\nThank you, see you soon!")
-                    break
+            print('\nYou have', count['response'], 'new order(s), would you like to download them?\n')
 
-                # if answerPrint == "u":
+            answer = input("Type y for yes, n for no: ", )
 
-                    # updateURL = "https://api.reptimeqa.com/reptime/public/api/import/M32685/orders/a87e7307-ffc6-490a-b1ac-f1a5d8f6c719/status/update"
-                    #
-                    # payload = "Pending"
-                    # headers = {
-                    #     'x-api-key': 'd843ec7a50cf568b220e3ec6fb2bc795',
-                    #     'Content-Type': 'text/plain',
-                    # }
-                    #
-                    # response = requests.request("POST", updateURL, headers=headers, data=payload)
+            if answer == "y":
+                detailsURL = "https://api.reptimeqa.com/reptime/public/api/orders/export/M32685/open"
+
+                # GET API to obtain new order details
+                response = requests.request("GET", detailsURL, headers=headers, data=payload)
+                results = response.json()
+                print("Your orders have been marked as RECEIVED.\n")
 
 
-        if answer == "n":
-            print("Thank you, see you later!")
 
-    else:
-        print("There are no new orders")
+            if answer == "n":
+                print("Thank you, see you later!")
+
+else:
+    print("There are no new orders")
