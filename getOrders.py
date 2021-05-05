@@ -41,18 +41,22 @@ while True:
         break
 
     if answerMenu == "u":
-        # User must update orderId within URL manually currently.
-        updateURL = "https://api.reptimeqa.com/reptime/public/api/import/M32685/orders/521420/status/update"
 
-        responseUpdate = requests.request("POST", updateURL, headers=headers, data=payload)
+        updateURL = "https://api.reptimeqa.com/reptime/public/api/import/M32685/orders/{orderID}/status/update"
+        updateID = input("Enter the ID of the order to be updated: ", )
+        replacedURL = updateURL.replace("{orderID}", updateID)
+        # print for testing purposes
+        print(replacedURL)
+        responseUpdate = requests.request("POST", replacedURL, headers=headers, data=payload)
 
+        # Make payload variable too, potential options for user.
         payload = "Backorder"
         headers = {
             'x-api-key': 'd843ec7a50cf568b220e3ec6fb2bc795',
             'Content-Type': 'text/plain',
         }
 
-        print("Done!")
+        print("Order(s) have been updated!")
 
     if answerMenu == "c":
 
@@ -70,8 +74,6 @@ while True:
                 response = requests.request("GET", detailsURL, headers=headers, data=payload)
                 results = response.json()
                 print("Your orders have been marked as RECEIVED.\n")
-
-
 
             if answer == "n":
                 print("Thank you, see you later!")
