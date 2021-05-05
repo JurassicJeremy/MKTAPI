@@ -45,7 +45,7 @@ while True:
         updateURL = "https://api.reptimeqa.com/reptime/public/api/import/M32685/orders/{orderID}/status/update"
         updateID = input("Enter the ID of the order to be updated: ", )
         replacedURL = updateURL.replace("{orderID}", updateID)
-        # print for testing purposes
+        # print for testing purposes.
         print(replacedURL)
         responseUpdate = requests.request("POST", replacedURL, headers=headers, data=payload)
 
