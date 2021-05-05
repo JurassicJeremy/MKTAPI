@@ -26,6 +26,26 @@ while True:
     print("*" * 25)
     answerMenu = input(":")
 
+    if answerMenu == "c":
+
+        # Currently functional, but need to wildcard search for response, not sure how to do that yet.
+        if ":1" in responseCount.text:
+
+            print('\nYou have', count['response'], 'new order(s), would you like to download them?\n')
+
+            answer = input("Type y for yes, n for no: ", )
+
+            if answer == "y":
+                detailsURL = "https://api.reptimeqa.com/reptime/public/api/orders/export/M32685/open"
+
+                # GET API to obtain new order details
+                response = requests.request("GET", detailsURL, headers=headers, data=payload)
+                results = response.json()
+                print("Your orders have been marked as RECEIVED.\n")
+
+            if answer == "n":
+                print("Thank you, see you later!")
+
     if answerMenu == "d":
         # Creates TXT file, and adds API response to file
         with open("apiResults1.txt", "w") as file:
@@ -47,36 +67,54 @@ while True:
         replacedURL = updateURL.replace("{orderID}", updateID)
         # print for testing purposes.
         print(replacedURL)
-        responseUpdate = requests.request("POST", replacedURL, headers=headers, data=payload)
+
+        print("Choose the desired status:")
+        print("p = Pending")
+        print("r = Processed")
+        print("m = Modified")
+        print("h = On Hold")
+        print("s = Shipped")
+        print("b = Backorder")
+        print("c = Cancelled")
+        print("o = complete")
+        statusMenu = (input(":"))
+        statusResult = ""
+        replacedStatus = statusMenu.replace("", statusResult)
+
+        if statusMenu == "p":
+            statusResult = ("Pending")
+
+        if statusMenu == "r":
+            statusResult = ("Processed")
+
+        if statusMenu == "m":
+            statusResult = ("Modified")
+
+        if statusMenu == "h":
+            statusResult = ("On Hold")
+
+        if statusMenu == "s":
+            statusResult = ("Shipped")
+
+        if statusMenu == "b":
+            statusResult = ("Backorder")
+
+        if statusMenu == "c":
+            statusResult = ("Cancelled")
+
+        if statusMenu == "o":
+            statusResult = ("Complete")
 
         # Make payload variable too, potential options for user.
-        payload = "Backorder"
+        payload = statusResult
         headers = {
             'x-api-key': 'd843ec7a50cf568b220e3ec6fb2bc795',
             'Content-Type': 'text/plain',
         }
 
+        responseUpdate = requests.request("POST", replacedURL, headers=headers, data=payload)
         print("Order(s) have been updated!")
+        print(payload)
 
-    if answerMenu == "c":
-
-        # Currently functional, but need to wildcard search for response, not sure how to do that yet.
-        if ":1" in responseCount.text:
-
-            print('\nYou have', count['response'], 'new order(s), would you like to download them?\n')
-
-            answer = input("Type y for yes, n for no: ", )
-
-            if answer == "y":
-                detailsURL = "https://api.reptimeqa.com/reptime/public/api/orders/export/M32685/open"
-
-                # GET API to obtain new order details
-                response = requests.request("GET", detailsURL, headers=headers, data=payload)
-                results = response.json()
-                print("Your orders have been marked as RECEIVED.\n")
-
-            if answer == "n":
-                print("Thank you, see you later!")
-
-else:
-    print("There are no new orders")
+# else:
+#     print("There are no new orders")
