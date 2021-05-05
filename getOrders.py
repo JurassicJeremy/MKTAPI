@@ -67,11 +67,10 @@ while True:
 
     if answerMenu == "u":
 
+        # Need ability for user to input PO number rather than orderID
         updateURL = "https://api.reptimeqa.com/reptime/public/api/import/M32685/orders/{orderID}/status/update"
         updateID = input("Enter the ID of the order to be updated: ", )
         replacedURL = updateURL.replace("{orderID}", updateID)
-        # print for testing purposes.
-        print(replacedURL)
 
         print("Choose the desired status:")
         print("p = Pending")
@@ -110,7 +109,6 @@ while True:
         if statusMenu == "o":
             statusResult = "Complete"
 
-        # Make payload variable too, potential options for user.
         payload = statusResult
         headers = {
             'x-api-key': 'd843ec7a50cf568b220e3ec6fb2bc795',
