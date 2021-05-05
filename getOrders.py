@@ -29,8 +29,12 @@ while True:
     if answerMenu == "c":
 
         # Currently functional, but need to wildcard search for response, not sure how to do that yet.
-        if ":1" in responseCount.text:
+        # if ":1" in responseCount.text:
+        while count['response'] == 0:
+            print("There are no new orders, please check again later.\n")
+            break
 
+        if ":1" in responseCount.text:
             print('\nYou have', count['response'], 'new order(s), would you like to download them?\n')
 
             answer = input("Type y for yes, n for no: ", )
@@ -45,6 +49,7 @@ while True:
 
             if answer == "n":
                 print("Thank you, see you later!")
+
 
     if answerMenu == "d":
         # Creates TXT file, and adds API response to file
@@ -82,28 +87,28 @@ while True:
         replacedStatus = statusMenu.replace("", statusResult)
 
         if statusMenu == "p":
-            statusResult = ("Pending")
+            statusResult = "Pending"
 
         if statusMenu == "r":
-            statusResult = ("Processed")
+            statusResult = "Processed"
 
         if statusMenu == "m":
-            statusResult = ("Modified")
+            statusResult = "Modified"
 
         if statusMenu == "h":
-            statusResult = ("On Hold")
+            statusResult = "On Hold"
 
         if statusMenu == "s":
-            statusResult = ("Shipped")
+            statusResult = "Shipped"
 
         if statusMenu == "b":
-            statusResult = ("Backorder")
+            statusResult = "Backorder"
 
         if statusMenu == "c":
-            statusResult = ("Cancelled")
+            statusResult = "Cancelled"
 
         if statusMenu == "o":
-            statusResult = ("Complete")
+            statusResult = "Complete"
 
         # Make payload variable too, potential options for user.
         payload = statusResult
@@ -115,6 +120,3 @@ while True:
         responseUpdate = requests.request("POST", replacedURL, headers=headers, data=payload)
         print("Order(s) have been updated!")
         print(payload)
-
-# else:
-#     print("There are no new orders")
