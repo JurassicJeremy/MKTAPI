@@ -50,7 +50,6 @@ while True:
             if answer == "n":
                 print("Thank you, see you later!")
 
-
     if answerMenu == "d":
         # Creates TXT file, and adds API response to file
         with open("apiResults1.txt", "w") as file:
@@ -69,8 +68,9 @@ while True:
 
         # Need ability for user to input PO number rather than orderID
         updateURL = "https://api.reptimeqa.com/reptime/public/api/import/M32685/orders/{orderID}/status/update"
-        updateID = input("Enter the ID of the order to be updated: ", )
-        replacedURL = updateURL.replace("{orderID}", updateID)
+        updateID = input("Enter up to 5 IDs of the orders to be updated, separated by commas: ", ).split(',')
+        for x in updateID:
+            replacedURL = updateURL.replace("{orderID}", x)
 
         print("Choose the desired status:")
         print("p = Pending")
@@ -115,6 +115,7 @@ while True:
             'Content-Type': 'text/plain',
         }
 
+        # Currently only does the first ID from the replacedURL code above
         responseUpdate = requests.request("POST", replacedURL, headers=headers, data=payload)
-        print("Order(s) have been updated!")
-        print(payload)
+
+        print("Order(s) have been updated to " + statusResult)
