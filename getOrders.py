@@ -68,9 +68,10 @@ while True:
 
         # Need ability for user to input PO number rather than orderID
         updateURL = "https://api.reptimeqa.com/reptime/public/api/import/M32685/orders/{orderID}/status/update"
-        updateID = input("Enter up to 5 IDs of the orders to be updated, separated by commas: ", ).split(',')
+        updateID = input("Enter up to 5 IDs of the orders to be updated, separated by commas: " ).split(',')
         for x in updateID:
             replacedURL = updateURL.replace("{orderID}", x)
+            print(replacedURL)
 
         print("Choose the desired status:")
         print("p = Pending")
@@ -109,13 +110,20 @@ while True:
         if statusMenu == "o":
             statusResult = "Complete"
 
+        else:
+            print("Invalid choice, please choose again.")
+
         payload = statusResult
         headers = {
             'x-api-key': 'd843ec7a50cf568b220e3ec6fb2bc795',
             'Content-Type': 'text/plain',
         }
 
-        # Currently only does the first ID from the replacedURL code above
-        responseUpdate = requests.request("POST", replacedURL, headers=headers, data=payload)
 
-        print("Order(s) have been updated to " + statusResult)
+        for x in updateID:
+            replacedURL = updateURL.replace("{orderID}", x)
+            responseUpdate = requests.request("POST", replacedURL, headers=headers, data=payload)
+            print("Order(s) have been updated to " + statusResult)
+
+    else:
+        print("Invalid choice, please choose again.")
