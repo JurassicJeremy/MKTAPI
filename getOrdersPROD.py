@@ -4,21 +4,21 @@ import os
 
 # The below API are for MarketTime's PROD DB
 # Update MFRID in URLs in lines 48 and 76
-# Update API Key in lines 14 and 124
+# Update API Key in lines 15 and 124
 
 # URL to retrieve count of new orders
-countURL = "https://api.reptimeportal.com/reptime/public/api/orders/export/c/count"
+countURL = "https://api.reptimeportal.com/reptime/public/api/orders/export/M32233/count"
 
 payload = {}
 headers = {
     # API Key provided by MarketTime
-    "x-api-key": "ENTER IN API KEY"
+    "x-api-key": "1616699a-5df3-46de-a3a0-4b77e6784828"
 }
 # GET API to obtain count of new orders
 responseCount = requests.request("GET", countURL, headers=headers, data=payload)
 count = json.loads(responseCount.text)
 
-if apiKey in apiKey.txt:
+if "x-api-key" in headers:
 
     while True:
 
@@ -47,7 +47,7 @@ if apiKey in apiKey.txt:
                 answer = input("Type y for yes, n for no: ", )
 
                 if answer == "y":
-                    detailsURL = "https://api.reptimeportal.com/reptime/public/api/orders/export/MFRID/open"
+                    detailsURL = "https://api.reptimeportal.com/reptime/public/api/orders/export/M32233/open"
 
                     # GET API to obtain new order details
                     response = requests.request("GET", detailsURL, headers=headers, data=payload)
@@ -75,7 +75,7 @@ if apiKey in apiKey.txt:
         if answerMenu == "u":
 
             # URL to update order status
-            updateURL = "https://api.reptimeportal.com/reptime/public/api/import/MFRID/orders/{orderID}/status/update"
+            updateURL = "https://api.reptimeportal.com/reptime/public/api/import/M32233/orders/{orderID}/status/update"
             updateID = input("Enter up to 5 IDs of the orders to be updated, separated by commas: " ).split(',')
             for x in updateID:
                 replacedURL = updateURL.replace("{orderID}", x)
@@ -122,7 +122,7 @@ if apiKey in apiKey.txt:
 
             payload = statusResult
             headers = {
-                "x-api-key": "ENTER IN API KEY",
+                "x-api-key": "1616699a-5df3-46de-a3a0-4b77e6784828",
                 'Content-Type': 'text/plain',
             }
 
